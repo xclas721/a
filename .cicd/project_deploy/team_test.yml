@@ -1,0 +1,14 @@
+release-to-test-team:
+  extends: .release-vuejs-to-project-team
+  variables:
+    JOB_GCP_CICD_CREDENTIAL: $GCP_EMV_PRODUCT_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrust-emv-product
+    TARGET_PROJECT_URL: gitlab-cloud.hitrustai.com/emv/project_team/cicdtest/acs-admin-frontend
+    TARGET_REPO_TOKEN: $CICD_PROJECT_TEAM
+    DEPLOY_VERSION_PREFIX: ${CI_COMMIT_BRANCH}
+    REMOVE_MODULE_LIST:
+  resource_group: release-to-test-team
+  environment:
+    name: test-acs-admin-frontend
+    action: start
+    deployment_tier: production

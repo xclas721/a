@@ -1,0 +1,28 @@
+release-to-cloud-team:
+  extends: .release-vuejs-to-project-team
+  variables:
+    JOB_GCP_CICD_CREDENTIAL: $GCP_EMV_PRODUCT_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrust-emv-product
+    TARGET_PROJECT_URL: gitlab-cloud.hitrustai.com/emv/project_team/cloud_team/v3/acs-admin-frontend
+    TARGET_REPO_TOKEN: $CICD_PROJECT_TEAM
+    DEPLOY_VERSION_PREFIX: ${CI_COMMIT_BRANCH}
+    REMOVE_MODULE_LIST:
+  resource_group: release-to-cloud-team
+  environment:
+    name: cloud-acs-admin-frontend
+    action: start
+    deployment_tier: production
+release-to-cloud-demo:
+  extends: .release-vuejs-to-project-team
+  variables:
+    JOB_GCP_CICD_CREDENTIAL: $GCP_EMV_PRODUCT_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrust-emv-product
+    TARGET_PROJECT_URL: gitlab-cloud.hitrustai.com/emv/project_team/cloud_team/demo/acs-admin-frontend
+    TARGET_REPO_TOKEN: $CICD_PROJECT_TEAM
+    DEPLOY_VERSION_PREFIX: demo-${CI_COMMIT_BRANCH}
+    REMOVE_MODULE_LIST:
+  resource_group: release-to-cloud-demo
+  environment:
+    name: cloud-demo-acs-admin-frontend
+    action: start
+    deployment_tier: production

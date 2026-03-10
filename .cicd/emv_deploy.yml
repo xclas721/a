@@ -1,0 +1,70 @@
+deploy-emv-acs-admin-frontend-v3:
+  variables:
+    QUALIFY_DEPLOYER:
+    VM_NAME: nginx-frankfurt
+    VM_ZONE: europe-west3-b
+    VM_GCP_PROJECT: hitrust-emv-product
+    JOB_GCP_CICD_CREDENTIAL: $GCP_EMV_PRODUCT_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrust-emv-product
+  stage: deploy
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  image: asia-east1-docker.pkg.dev/hitrustpay-shareconnect/hitrustpay-docker-repository/gitlabpipeline:$PIPELINE_NODEJS_IMAGE_TAG
+  when: manual
+  script:
+    - !reference [.script-print-job-trigger]
+    - !reference [.script-qualify-deployer]
+    - !reference [.script-gcloud-login]
+    - npm install
+    - npm run build:emv
+    - ls -l dist
+    - !reference [.script-gen-gce-ssh-key]
+    - gcloud compute instances add-metadata $VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --metadata-from-file ssh-keys=/root/.ssh/gitlab_ci_key.pub
+    - sleep 5 # Give GCP a moment to register the new SSH key
+    - cd dist
+    - tar -cf dist_acs.tar .
+    - gcloud compute scp dist_acs.tar gitlab-ci@$VM_NAME:/tmp/ --zone=$VM_ZONE --project=$VM_GCP_PROJECT --tunnel-through-iap --ssh-key-file=/root/.ssh/gitlab_ci_key
+    - gcloud compute ssh gitlab-ci@$VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --tunnel-through-iap --no-user-output-enabled --ssh-key-file=/root/.ssh/gitlab_ci_key --command="sudo tar -xf /tmp/dist_acs.tar -C /var/www/acs-admin-frontend/acs-admin/"
+    #Clean Up SSH Key Metadata
+    - gcloud compute instances remove-metadata $VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --keys=ssh-keys
+  environment:
+    name: EMVCo-acs-admin-frontend-v3
+    url: https://emv-sut.ardichuang.name/acs-admin/
+    action: start
+    deployment_tier: production
+
+deploy-emv-demo-v3-acs-admin-frontend-v3:
+  variables:
+    QUALIFY_DEPLOYER:
+    VM_NAME: emv-v3-demo
+    VM_ZONE: asia-east1-b
+    VM_GCP_PROJECT: hitrustpay-sim-acs
+    JOB_GCP_CICD_CREDENTIAL: $GCP_SIM_ACS_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrustpay-sim-acs
+  stage: deploy
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  image: asia-east1-docker.pkg.dev/hitrustpay-shareconnect/hitrustpay-docker-repository/gitlabpipeline:$PIPELINE_NODEJS_IMAGE_TAG
+  when: manual
+  resource_group: emv-v3-demo
+  script:
+    - !reference [.script-print-job-trigger]
+    - !reference [.script-qualify-deployer]
+    - !reference [.script-gcloud-login]
+    - npm install
+    - npm run build:emvdemo
+    - ls -l dist
+    - !reference [.script-gen-gce-ssh-key]
+    - gcloud compute instances add-metadata $VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --metadata-from-file ssh-keys=/root/.ssh/gitlab_ci_key.pub
+    - sleep 5 # Give GCP a moment to register the new SSH key
+    - cd dist
+    - tar -cf dist_acs.tar .
+    - gcloud compute scp dist_acs.tar gitlab-ci@$VM_NAME:/tmp/ --zone=$VM_ZONE --project=$VM_GCP_PROJECT --tunnel-through-iap --ssh-key-file=/root/.ssh/gitlab_ci_key
+    - gcloud compute ssh gitlab-ci@$VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --tunnel-through-iap --no-user-output-enabled --ssh-key-file=/root/.ssh/gitlab_ci_key --command="sudo tar -xf /tmp/dist_acs.tar -C /var/www/acs-admin-frontend/acs-admin/"
+    #Clean Up SSH Key Metadata
+    - gcloud compute instances remove-metadata $VM_NAME --zone=$VM_ZONE --project=$VM_GCP_PROJECT --keys=ssh-keys
+  environment:
+    name: V3-DEMO-acs-admin-frontend-v3
+    url: https://emv-v3-veridemo.ardichuang.name/acs-admin/
+    action: start
+    deployment_tier: production

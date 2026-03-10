@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HiTRUST Portal</title>
+
+    <!-- production, docker時用來吃環境變數(不得存放secret, 取代原先的.env相關設定)-->
+    <script src="./app-config.js"></script>
+    <!-- -->
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

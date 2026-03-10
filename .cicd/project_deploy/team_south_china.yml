@@ -1,0 +1,14 @@
+release-to-team-south-china:
+  extends: .release-vuejs-to-project-team
+  variables:
+    JOB_GCP_CICD_CREDENTIAL: $GCP_EMV_PRODUCT_CICD_CREDENTIAL
+    JOB_GCP_PROJECT: hitrust-emv-product
+    TARGET_PROJECT_URL: gitlab-cloud.hitrustai.com/emv/project_team/southern-china/v3/acs-admin-frontend
+    TARGET_REPO_TOKEN: $CICD_PROJECT_TEAM
+    DEPLOY_VERSION_PREFIX: SouthChina-${CI_COMMIT_BRANCH}
+    REMOVE_MODULE_LIST:
+  resource_group: release-to-south-china-team
+  environment:
+    name: south-china-acs-admin-frontend
+    action: start
+    deployment_tier: production

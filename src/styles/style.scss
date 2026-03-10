@@ -1,0 +1,18 @@
+// Variable overrides (must load first so CoreUI sees them)
+@use 'variables' as *;
+
+// CoreUI
+@use '@coreui/coreui/scss/coreui';
+@use '@coreui/chartjs/scss/coreui-chartjs';
+
+// Vendors
+@use 'vendors/simplebar';
+
+// Custom styles for this theme
+@use 'theme';
+
+// Extra custom CSS
+@use 'custom';
+
+// 登入頁表單共用（變數 + 精簡 CSS）
+@use 'login-form';

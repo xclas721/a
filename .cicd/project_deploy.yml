@@ -1,0 +1,7 @@
+include:
+  - local: '.cicd/project_deploy/team_cloud.yml'
+  - local: '.cicd/project_deploy/team_test.yml'
+  - local: '.cicd/project_deploy/team_south_china.yml'
+  - local: '.cicd/project_deploy/team_north_china.yml'
+  - local: '.cicd/project_deploy/team_east_china.yml'
+  - local: '.cicd/project_deploy/team_taipei.yml'

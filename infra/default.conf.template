@@ -1,0 +1,28 @@
+server {
+  listen ${PORT};
+  server_name _;
+  
+    location ${NGINX_ADMIN_FRONTEND_CONTEXT_PATH}/ {
+        
+        alias /usr/share/nginx/html/;
+        #index index.html;
+
+        # Only apply `try_files` for non-static requests
+        #try_files $uri $uri/ /index.html;
+
+        # Fix Vue.js 404 reload issues
+        #error_page 404 =200 /index.html;
+    }
+
+    # Proxy API requests to backend
+    location ${NGINX_ADMIN_FRONTEND_CONTEXT_PATH}/api/ {        
+        proxy_pass http://${NGINX_ADMIN_BACKEND_HOST}:${NGINX_ADMIN_BACKEND_PORT}${NGINX_ADMIN_BACKEND_CONTEXT_PATH}/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+  
+
+  location = /healthz { default_type text/plain; return 200 'ok'; }
+}

@@ -1,0 +1,608 @@
+@use '@coreui/coreui/scss/coreui' as *;
+
+// Simplified Chinese: The entire system uses Noto Sans SC
+html[data-locale='zh_CN'] {
+  font-family: 'Noto Sans SC', sans-serif;
+
+  // The default font for the sidebar is Inter, need to override to Noto Sans SC
+  .sidebar.sidebar-fixed .nav-link,
+  .sidebar.sidebar-fixed .sidebar-brand a {
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+}
+
+// ─── Header top-right dropdowns (Language / Timezone / User): unified style, consistent with theme variables ───
+.header-dropdown {
+  position: relative;
+}
+
+.header-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  z-index: 1050;
+  display: none;
+  min-width: 160px;
+  margin: 0;
+  padding: 0.5rem 0;
+  background: var(--cui-body-bg);
+  border: 1px solid var(--cui-border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  list-style: none;
+}
+
+.header-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+
+.header-dropdown-menu li {
+  margin: 0;
+  list-style: none;
+}
+
+.header-dropdown-menu.dropdown-menu-end {
+  right: 0;
+  left: auto;
+}
+
+.header-dropdown:hover .header-dropdown-menu,
+.header-dropdown.show .header-dropdown-menu {
+  display: block;
+}
+
+.header-dropdown-menu-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.header-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+  color: var(--cui-body-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.header-dropdown-item:hover {
+  background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.1));
+  color: var(--sidebar-active-text, #8c1c36);
+}
+
+.header-dropdown-item.active {
+  font-weight: 600;
+  background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.1));
+  color: var(--sidebar-active-text, #8c1c36);
+}
+
+.header-dropdown-header {
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cui-body-color);
+  background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.08));
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 4px;
+}
+
+.header-dropdown-menu-user {
+  padding-top: 0;
+}
+
+.header-dropdown-menu-user .header-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-dropdown-menu-user .header-dropdown-item i {
+  width: 1em;
+  flex-shrink: 0;
+}
+
+// --- DataTable (Table background color, border radius, theme adapts) ---
+.optimized-table {
+  background: var(--cui-body-bg);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.optimized-table th {
+  background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  color: var(--sidebar-active-text, #8c1c36);
+  font-weight: 600;
+}
+
+.optimized-table td {
+  background: var(--cui-body-bg);
+}
+
+/* 表頭第一列左上、右上圓角 */
+.optimized-table thead tr:first-child th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.optimized-table thead tr:first-child th:last-child {
+  border-top-right-radius: 8px;
+}
+
+/* 表體最後一列左下、右下圓角 */
+.optimized-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+.optimized-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+// ─── Shared (theme-agnostic) ───────────────────────────────
+.wrapper {
+  width: 100%;
+  @include ltr-rtl('padding-left', var(--cui-sidebar-occupy-start, 0));
+  @include ltr-rtl('padding-right', var(--cui-sidebar-occupy-end, 0));
+  will-change: auto;
+  @include transition(padding 0.15s);
+}
+
+.header > .container-fluid,
+.sidebar-header {
+  min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+}
+
+.sidebar-brand-full {
+  object-fit: contain;
+  width: auto;
+  max-width: 210px;
+  height: 32px;
+}
+
+.sidebar-brand,
+.sidebar-brand a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-header {
+  .nav-underline-border {
+    --cui-nav-underline-border-link-padding-x: 1rem;
+    --cui-nav-underline-border-gap: 0;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: calc(4rem + 1px); // stylelint-disable-line function-disallowed-list
+  }
+}
+
+.sidebar-toggler {
+  @include ltr-rtl('margin-left', auto);
+}
+
+.sidebar-narrow,
+.sidebar-narrow-unfoldable:not(:hover) {
+  .sidebar-toggler {
+    @include ltr-rtl('margin-right', auto);
+  }
+}
+
+.header > .container-fluid + .container-fluid {
+  min-height: 3rem;
+}
+
+.footer {
+  min-height: calc(3rem + 1px); // stylelint-disable-line function-disallowed-list
+}
+
+// Sidebar active highlight (left bar + block); colors from theme variables
+.sidebar.sidebar-fixed .sidebar-nav .nav-item > a.router-link-exact-active {
+  position: relative;
+  display: block;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    min-height: 40px;
+    background: var(--sidebar-active-bar, #8c1c36);
+    border-radius: 0 7px 7px 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    right: 6px;
+    top: 0;
+    bottom: 0;
+    background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.1));
+    border-radius: 7px;
+    z-index: 0;
+  }
+
+  .nav-link {
+    position: relative;
+    z-index: 1;
+    color: var(--sidebar-active-text, #8c1c36);
+  }
+
+  .icon {
+    color: var(--sidebar-active-text, #8c1c36);
+  }
+}
+
+// Sidebar footer: Account Security link active highlight (same as nav items)
+.sidebar.sidebar-fixed .sidebar-footer a.router-link-exact-active {
+  position: relative;
+  display: block;
+  border-radius: 7px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    min-height: 40px;
+    background: var(--sidebar-active-bar, #8c1c36);
+    border-radius: 0 7px 7px 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    right: 6px;
+    top: 0;
+    bottom: 0;
+    background: var(--sidebar-active-bg, rgba(140, 28, 54, 0.1));
+    border-radius: 7px;
+    z-index: 0;
+  }
+
+  &.nav-link {
+    position: relative;
+    z-index: 1;
+    color: var(--sidebar-active-text, #8c1c36);
+  }
+
+  .icon {
+    color: var(--sidebar-active-text, #8c1c36);
+  }
+}
+
+// Account security (sidebar footer): 寬高與上方 .sidebar-nav .nav-link 一致、與子路由對齊、hover 與 .nav-item 一致
+.sidebar.sidebar-fixed .sidebar-footer {
+  padding: var(--cui-sidebar-nav-padding-y, 0.25rem) var(--cui-sidebar-nav-padding-x, 0.5rem);
+  padding-bottom: var(--cui-sidebar-nav-padding-y, 0.25rem);
+}
+.sidebar.sidebar-fixed .sidebar-footer .nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 40px;
+  padding: var(--cui-sidebar-nav-link-padding-y, 0.75rem) var(--cui-sidebar-nav-link-padding-x, 1rem);
+  @include ltr-rtl('padding-left', 1rem);
+  text-align: left;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+  box-sizing: border-box;
+}
+.sidebar.sidebar-fixed .sidebar-footer .nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+// SweetAlert2 按鈕間隔
+.swal2-actions {
+  gap: 0.75rem;
+}
+
+// ─── Light theme ───────────────────────────────────────────
+[data-coreui-theme='light'] {
+  --text-blue: #0d6efd;
+  --detail-title-blue: rgba(140, 28, 54, 0.12);
+  --detail-title-green: #dff0d8;
+  --detail-title-red: #f2dede;
+  --cui-body-bg: #ffffff;
+  --cui-tertiary-bg: #f8f8f8;
+  --cui-body-color: #212529;
+  --cui-border-color: #dee2e6;
+  --cui-secondary-bg: #e9ecef;
+  --cui-tertiary-color: rgba(0, 0, 0, 0.45);
+  --cui-header-bg: #ffffff;
+  --cui-header-border-color: #dee2e6;
+  --sidebar-active-bar: #8c1c36;
+  --sidebar-active-bg: rgba(140, 28, 54, 0.1);
+  --sidebar-active-text: #8c1c36;
+
+  body,
+  .wrapper .body {
+    background-color: #f8f8f8;
+    color: #212529;
+  }
+
+  .header,
+  .header .container-fluid {
+    background-color: #ffffff;
+    border-bottom-color: #dee2e6;
+    color: #212529;
+  }
+
+  .breadcrumb,
+  .breadcrumb-item,
+  .breadcrumb-item a {
+    color: #212529;
+  }
+
+  .sidebar.sidebar-fixed {
+    top: 0 !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    border-right: 1px solid #d9d9d9;
+
+    .nav-link,
+    .sidebar-brand a {
+      color: #333333;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 24px;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .icon {
+      color: #1e1e1e;
+    }
+  }
+
+  /* DataTable outline buttons disabled: visible gray (light) */
+  .btn-outline-primary:disabled,
+  .btn-outline-danger:disabled,
+  .btn-outline-neutral:disabled {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.28) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* 國際貨幣 ISO 上傳區塊：不透明、與頁面區隔 */
+  .currency-upload-block {
+    background-color: #ffffff !important;
+  }
+
+  /* Content card: light theme unified white background */
+  .content-box,
+  .content-box-red {
+    background-color: #ffffff !important;
+  }
+}
+
+// ─── Dark theme ────────────────────────────────────────────
+[data-coreui-theme='dark'] {
+  --text-blue: #f6be06;
+  --detail-title-blue: rgba(140, 28, 54, 0.2);
+  --detail-title-green: #6968b8;
+  --detail-title-red: #774848;
+  --cui-body-bg: #21191b;
+  --cui-tertiary-bg: #21191b;
+  --cui-body-color: #e0e0e0;
+  --cui-border-color: rgba(255, 255, 255, 0.12);
+  --cui-secondary-bg: #2d2527;
+  --cui-tertiary-color: rgba(255, 255, 255, 0.6);
+  --cui-header-bg: #21191b;
+  --cui-header-border-color: rgba(255, 255, 255, 0.12);
+  --sidebar-active-bar: #8c1c36;
+  --sidebar-active-bg: rgba(140, 28, 54, 0.2);
+  --sidebar-active-text: #ffffff;
+
+  body,
+  .wrapper .body {
+    background-color: #21191b;
+    color: #e0e0e0;
+  }
+
+  .header,
+  .header .container-fluid {
+    background-color: #21191b;
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+    color: #e0e0e0;
+  }
+
+  .breadcrumb,
+  .breadcrumb-item,
+  .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .breadcrumb-item.active {
+    color: #b3b3b3;
+  }
+
+  /* Header bar: theme switch and circle buttons */
+  .header-theme-switch-btn {
+    --header-switch-bg: #dfb8c133;
+    background-color: #dfb8c133;
+  }
+
+  /* DataTable outline buttons disabled: visible light gray on dark bg */
+  .btn-outline-primary:disabled,
+  .btn-outline-danger:disabled,
+  .btn-outline-neutral:disabled {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+
+  /* Query Section and ISO Upload Section: consistent opaque dark background #373031 */
+  .query-criteria .card,
+  .currency-upload-block {
+    background-color: #373031 !important;
+  }
+
+  /* Content card: dark theme unified opaque background #373031 */
+  .content-box,
+  .content-box-red {
+    background-color: #373031 !important;
+  }
+
+  /* Table, Form (modal): dark theme unified opaque background #373031 */
+  .optimized-table,
+  .optimized-table td {
+    background-color: #373031 !important;
+  }
+  .modal-content {
+    background-color: #373031 !important;
+  }
+
+  /* Unified no reflection: consistent with light theme, no立体反光 */
+  .header-theme-switch-thumb {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .header-theme-switch-thumb.is-dark {
+    background: #21191b;
+  }
+
+  .header-actions {
+    --header-btn-bg: #dfb8c133;
+    --header-btn-border: rgba(255, 255, 255, 0.12);
+    --header-btn-color: #b3b3b3;
+    --header-btn-hover-bg: rgba(223, 184, 193, 0.35);
+    --header-btn-hover-border: rgba(255, 255, 255, 0.12);
+    --header-btn-hover-color: #e0e0e0;
+  }
+
+  .header-btn-circle {
+    background-color: #dfb8c133 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #b3b3b3;
+  }
+
+  .header-btn-circle:hover {
+    background-color: rgba(223, 184, 193, 0.35) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #e0e0e0;
+  }
+
+  .sidebar.sidebar-fixed {
+    background: #21191b !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+    .nav-link,
+    .sidebar-brand a {
+      color: #b3b3b3;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 24px;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  /* 按鈕：dark 模式下維持辨識度（含外框按鈕） */
+  .btn-primary {
+    color: #fff !important;
+    background-color: #a62d4a !important;
+    border-color: #a62d4a !important;
+  }
+  .btn-primary:hover,
+  .btn-primary:focus-visible,
+  .btn-primary.active {
+    background-color: #bf3554 !important;
+    border-color: #bf3554 !important;
+    color: #fff !important;
+  }
+  .btn-outline-primary {
+    color: #d49fab !important;
+    border-color: #d49fab !important;
+    background-color: transparent !important;
+  }
+  .btn-outline-primary:hover,
+  .btn-outline-primary:focus-visible,
+  .btn-outline-primary.active {
+    background-color: #a62d4a !important;
+    border-color: #a62d4a !important;
+    color: #fff !important;
+  }
+  .btn-secondary {
+    color: #fff !important;
+    background-color: #b8a4ab !important;
+    border-color: #b8a4ab !important;
+  }
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible,
+  .btn-secondary.active {
+    background-color: #c9b8be !important;
+    border-color: #c9b8be !important;
+    color: #fff !important;
+  }
+  .btn-outline-secondary {
+    color: #c9b8be !important;
+    border-color: #c9b8be !important;
+    background-color: transparent !important;
+  }
+  .btn-outline-secondary:hover,
+  .btn-outline-secondary:focus-visible,
+  .btn-outline-secondary.active {
+    background-color: #b8a4ab !important;
+    border-color: #b8a4ab !important;
+    color: #fff !important;
+  }
+  .btn-neutral {
+    color: #fff !important;
+    background-color: #737373 !important;
+    border-color: #737373 !important;
+  }
+  .btn-neutral:hover,
+  .btn-neutral:focus-visible,
+  .btn-neutral.active {
+    background-color: #5c5c5c !important;
+    border-color: #5c5c5c !important;
+    color: #fff !important;
+  }
+}
+
+// ─── Form footer buttons: unified alignment (left reset, right cancel/save), same padding & min-width ───
+.form-footer-buttons {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.form-footer-buttons .d-flex.justify-content-between > .d-flex:first-child {
+  flex: 0 0 auto;
+}
+.form-footer-buttons .btn {
+  min-width: 170px;
+}
+
+@if $enable-dark-mode {
+  @include color-mode(dark) {
+    .footer {
+      --cui-footer-bg: var(--cui-body-bg);
+    }
+  }
+}

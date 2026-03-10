@@ -1,0 +1,59 @@
+image: asia-east1-docker.pkg.dev/hitrustpay-shareconnect/hitrustpay-docker-repository/gitlabpipeline:$PIPELINE_NODEJS_IMAGE_TAG
+
+stages:
+  - install
+  - check
+  - dependency-check
+  - build
+
+cache:
+  key: ${CI_COMMIT_BRANCH}
+  paths:
+    - node_modules/
+
+# Install dependencies
+install_dependencies:
+  stage: install
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  script:
+    - node -v
+    - npm install
+
+eslint-check:
+  stage: check
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  script:
+    - node -v
+    - npm run lint
+
+prettier-check:
+  stage: check
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  script:
+    - node -v
+    - npm run prettier:check
+
+npm_audit:
+  stage: dependency-check
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  script:
+    - npm ci # 確保 node_modules 是乾淨安裝
+    - npm audit --audit-level=high --json > npm-audit-report.json
+  allow_failure: false # 有高風險以上漏洞就讓 pipeline 失敗
+  artifacts:
+    when: always
+    paths:
+      - npm-audit-report.json
+    expire_in: 1 week
+
+build_project:
+  stage: build
+  tags:
+    - 'shareconnect-gke-runner-emv'
+  script:
+    - node -v
+    - npm run build

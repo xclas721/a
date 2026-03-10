@@ -1,0 +1,188 @@
+// Here you can add other styles
+@use 'sass:color';
+
+.text-blue {
+  color: var(--text-blue);
+}
+.header-title-red {
+  background-color: var(--detail-title-red);
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+.header-title {
+  background-color: var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  color: var(--sidebar-active-text, #8c1c36);
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+
+.border.border-light-subtle:has(.header-title) {
+  border-radius: 6px;
+}
+
+.content-box {
+  background-color: var(--cui-body-bg);
+  border: 1px solid var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  border-radius: 0 0 5px 5px;
+  padding: 25px 30px;
+}
+.content-box-red {
+  background-color: var(--detail-title-red);
+  border: 1px solid var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  border-radius: 0 0 5px 5px;
+  padding: 25px 30px;
+}
+.header-title-query {
+  background-color: #d2d5d5;
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+.content-box-query {
+  border: 1px solid #d2d5d5;
+  border-radius: 0 0 5px 5px;
+  padding: 25px 30px;
+}
+.header-title-before {
+  background-color: var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  color: var(--sidebar-active-text, #8c1c36);
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+.content-box-before {
+  border: 1px solid var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  border-radius: 0 0 5px 5px;
+  padding: 25px 30px;
+}
+
+.header-title-after {
+  background-color: var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  color: var(--sidebar-active-text, #8c1c36);
+  padding: 10px;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 5px 5px 0 0;
+}
+.content-box-after {
+  border: 1px solid var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+  border-radius: 0 0 5px 5px;
+  padding: 25px 30px;
+}
+.menu-content {
+  border: 2px solid var(--sidebar-active-bg, rgba(140, 28, 54, 0.12));
+}
+
+.modal-content {
+  border: 0;
+}
+.required:before {
+  content: '* ';
+  color: red;
+}
+
+.input-error {
+  border-color: #dc3545;
+}
+
+/* ========== 按鈕主色 / 次色（覆寫 Bootstrap 預設） ========== */
+$btn-primary: #8c1c36;
+$btn-secondary: #d49fab;
+
+/* primary */
+.btn-primary {
+  color: #fff !important;
+  background-color: $btn-primary !important;
+  border-color: $btn-primary !important;
+}
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.btn-primary.active {
+  background-color: color.adjust($btn-primary, $lightness: -8%) !important;
+  border-color: color.adjust($btn-primary, $lightness: -8%) !important;
+  color: #fff !important;
+}
+.btn-primary:disabled,
+.btn-primary.disabled {
+  background-color: $btn-secondary !important;
+  border-color: $btn-secondary !important;
+  color: #fff !important;
+}
+
+.btn-outline-primary {
+  color: $btn-primary !important;
+  border-color: $btn-primary !important;
+  background-color: transparent !important;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus-visible,
+.btn-outline-primary.active {
+  background-color: $btn-primary !important;
+  border-color: $btn-primary !important;
+  color: #fff !important;
+}
+.btn-outline-primary:disabled,
+.btn-outline-primary.disabled {
+  color: $btn-secondary !important;
+  border-color: $btn-secondary !important;
+  background-color: transparent !important;
+}
+
+/* secondary */
+.btn-secondary {
+  color: #fff !important;
+  background-color: $btn-secondary !important;
+  border-color: $btn-secondary !important;
+}
+.btn-secondary:hover,
+.btn-secondary:focus-visible,
+.btn-secondary.active {
+  background-color: color.adjust($btn-secondary, $lightness: -8%) !important;
+  border-color: color.adjust($btn-secondary, $lightness: -8%) !important;
+  color: #fff !important;
+}
+.btn-secondary:disabled,
+.btn-secondary.disabled {
+  opacity: 0.7;
+}
+
+.btn-outline-secondary {
+  color: $btn-secondary !important;
+  border-color: $btn-secondary !important;
+  background-color: transparent !important;
+}
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus-visible,
+.btn-outline-secondary.active {
+  background-color: $btn-secondary !important;
+  border-color: $btn-secondary !important;
+  color: #fff !important;
+}
+.btn-outline-secondary:disabled,
+.btn-outline-secondary.disabled {
+  opacity: 0.7;
+}
+
+/* neutral (table delete button: gray background with white text) */
+.btn-neutral {
+  color: #fff !important;
+  background-color: #737373 !important;
+  border-color: #737373 !important;
+}
+.btn-neutral:hover,
+.btn-neutral:focus-visible,
+.btn-neutral.active {
+  background-color: color.adjust(#737373, $lightness: -8%) !important;
+  border-color: color.adjust(#737373, $lightness: -8%) !important;
+  color: #fff !important;
+}
+.btn-neutral:disabled,
+.btn-neutral.disabled {
+  opacity: 0.7;
+}
